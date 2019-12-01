@@ -6,7 +6,7 @@ Usage:
 
 ```
 docker run -t -d -p 103.135.248.205:22:22 \
-	--env ROOT_LOGIN_UNLOCKED=true \
+	--env PERMIT_ROOT_LOGIN=true \
     --restart always \
     jarry6/alpine-sshd
 ```
