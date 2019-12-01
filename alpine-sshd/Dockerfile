@@ -10,13 +10,13 @@ ENV         OPENSSH_VERSION="${OPENSSH_VERSION}" \
             ROOT_KEYPAIR_LOGIN_ENABLED="false" \
             ROOT_LOGIN_UNLOCKED="false"
 
+
+COPY        entrypoint.sh /
 RUN         sed -i 's/dl-cdn.alpinelinux.org/mirrors.nju.edu.cn/g' /etc/apk/repositories \
             && apk add --upgrade --no-cache rsync openssh \
             &&  mkdir -p /root/.ssh "${CONF_VOLUME}" "${AUTHORIZED_KEYS_VOLUME}" \
             && cp -a /etc/ssh "${CACHED_SSH_DIRECTORY}" \
             && rm -rf /var/cache/apk/*
-
-COPY        entrypoint.sh /
 EXPOSE      22
 VOLUME      ["/etc/ssh"]
-ENTRYPOINT  ["/entrypoint.sh"]
+CMD  ["sh",/entrypoint.sh"]
