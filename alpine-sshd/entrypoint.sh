@@ -106,13 +106,6 @@ printf "\n"
 
 log "Applying configuration for additional users ..."
 
-if [[ ! -x "${USER_LOGIN_SHELL}" ]]; then
-    log "error" "    can not allocate desired shell '${USER_LOGIN_SHELL}', falling back to '${USER_LOGIN_SHELL_FALLBACK}' ..."
-    USER_LOGIN_SHELL="${USER_LOGIN_SHELL_FALLBACK}"
-fi
-
-log "    desired shell is ${USER_LOGIN_SHELL}"
-
 
 if [[ -n "${SSH_USERS}" ]]; then
 
