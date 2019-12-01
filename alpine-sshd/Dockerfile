@@ -16,11 +16,13 @@ RUN         sed -i 's/dl-cdn.alpinelinux.org/mirrors.nju.edu.cn/g' /etc/apk/repo
             && apk add --upgrade --no-cache rsync openssh \
             &&  mkdir -p /root/.ssh "${CONF_VOLUME}" "${AUTHORIZED_KEYS_VOLUME}" \
             && cp -a /etc/ssh "${CACHED_SSH_DIRECTORY}" \
-            && rm -rf /var/cache/apk/* \
+            && rm -rf /var/cache/apk/*
 
-RUN         echo "echo \"you can't run this command on this host.\"">/disable.sh \
+RUN         echo "echo Sorry! You can\\'t run this command on this host.">/disable.sh \
             && chmod u+x /disable.sh \
-            && ln -s /disable.sh /usr/bin/reboot 
+            && ln -s /disable.sh /usr/bin/reboot \
+            && ln -s /disable.sh /usr/bin/poweroff 
+
 
 EXPOSE      22
 VOLUME      ["/etc/ssh"]
