@@ -8,7 +8,7 @@ ENV         OPENSSH_VERSION="${OPENSSH_VERSION}" \
             CACHED_SSH_DIRECTORY="${CONF_VOLUME}/ssh" \
             AUTHORIZED_KEYS_VOLUME="${CONF_VOLUME}/authorized_keys" \
             ROOT_KEYPAIR_LOGIN_ENABLED="false" \
-            ROOT_LOGIN_UNLOCKED="false"
+            PERMIT_ROOT_LOGIN="false"
 
 
 COPY        entrypoint.sh /
