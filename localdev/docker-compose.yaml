@@ -1,0 +1,14 @@
+version: "3"
+services:
+    localdev:
+        build: 
+            context: ./
+            dockerfile: Dockerfile
+        image: jarry6/localdev:latest
+
+    localdev_debian:
+        build:
+            context: ./debian
+            dockerfile: Dockerfile
+        image: jarry6/localdev:debian
+
