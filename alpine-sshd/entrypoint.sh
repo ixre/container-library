@@ -76,11 +76,11 @@ if [[ "${PERMIT_ROOT_LOGIN}" == "true" ]] ; then
     # generate random root password
     if [[ -z "${ROOT_PASSWORD}" ]]; then
         ROOT_PASSWORD="$(generate_passwd)"
-        log "    generating random password for user 'root' = ${ROOT_PASSWORD}"
+        ROOT_PASSWORD=${ROOT_PASSWORD:0-8}
+        log "    generating random password for user 'root' is ${ROOT_PASSWORD}"
     fi
 
     echo "root:${ROOT_PASSWORD}" | chpasswd &>/dev/null
-    log "    password for user 'root' set"
     log "warning" "    user 'root' is now UNLOCKED"
 
     # set root login mode by password or keypair
