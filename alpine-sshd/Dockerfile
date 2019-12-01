@@ -18,7 +18,7 @@ RUN         sed -i 's/dl-cdn.alpinelinux.org/mirrors.nju.edu.cn/g' /etc/apk/repo
             && cp -a /etc/ssh "${CACHED_SSH_DIRECTORY}" \
             && rm -rf /var/cache/apk/*
 
-RUN         echo "echo Sorry! You can\\'t run this command on this host.">/disable.sh \
+RUN         echo "echo Sorry! You can\\'t run this command, please use \\'exit\\' instead of! ">/disable.sh \
             && chmod u+x /disable.sh \
             && ln -s /disable.sh /usr/bin/reboot \
             && ln -s /disable.sh /usr/bin/poweroff 

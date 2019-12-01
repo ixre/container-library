@@ -52,12 +52,12 @@ if [[ -n "${KEYPAIR_LOGIN}" ]] && [[ "${KEYPAIR_LOGIN}" == "true" ]]; then
     ROOT_KEYPAIR_LOGIN_ENABLED="${KEYPAIR_LOGIN}"
 fi
 if [[ -n "${ROOT_PASSWORD}" ]]; then
-    ROOT_LOGIN_UNLOCKED="true"
+    PERMIT_ROOT_LOGIN="true"
 fi
 
 # enable root login if keypair login is enabled
 if [[ "${ROOT_KEYPAIR_LOGIN_ENABLED}" == "true" ]]; then
-    ROOT_LOGIN_UNLOCKED="true"
+    PERMIT_ROOT_LOGIN="true"
 fi
 
 # initiate default sshd-config if there is none available
@@ -71,7 +71,7 @@ ssh-keygen -A 1>/dev/null
 
 log "Applying configuration for 'root' user ..."
 
-if [[ "${ROOT_LOGIN_UNLOCKED}" == "true" ]] ; then
+if [[ "${PERMIT_ROOT_LOGIN}" == "true" ]] ; then
 
     # generate random root password
     if [[ -z "${ROOT_PASSWORD}" ]]; then
