@@ -16,11 +16,10 @@ RUN         sed -i 's/dl-cdn.alpinelinux.org/mirrors.nju.edu.cn/g' /etc/apk/repo
             && apk add --upgrade --no-cache openssh openrc busybox-extras rsync \
             &&  mkdir -p /root/.ssh "${CONF_VOLUME}" "${AUTHORIZED_KEYS_VOLUME}" \
             && cp -a /etc/ssh "${CACHED_SSH_DIRECTORY}" \
-            && rm -rf /var/cache/apk/*
+            && rm -rf /var/cache/apk/* \
+            && mkdir -p /run/openrc && touch /run/openrc/softlevel
 
-RUN         echo -e '#!/sbin/openrc-run\n\nsh /entrypoint.sh' > /etc/local.d/entrypoint.start \
-            && chmod u+x /etc/local.d/entrypoint.start \
-            && echo "echo Error! You should use command \\"exit\\" to exit session. ">/disable.sh \
+RUN         echo "echo Error! You should use command \\"exit\\" to exit session. ">/disable.sh \
             && chmod u+x /disable.sh \
             && ln -s /disable.sh /usr/bin/reboot \
             && ln -s /disable.sh /usr/bin/poweroff 
@@ -28,4 +27,4 @@ RUN         echo -e '#!/sbin/openrc-run\n\nsh /entrypoint.sh' > /etc/local.d/ent
 
 EXPOSE      22
 VOLUME      ["/etc/ssh"]
-ENTRYPOINT  ["/sbin/init"]
+ENTRYPOINT  ["sh","/entrypoint.sh"]
