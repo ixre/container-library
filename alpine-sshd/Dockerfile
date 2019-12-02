@@ -19,6 +19,7 @@ RUN         sed -i 's/dl-cdn.alpinelinux.org/mirrors.nju.edu.cn/g' /etc/apk/repo
             && rm -rf /var/cache/apk/*
 
 RUN         echo 'sh /entrypoint.sh' > /etc/local.d/entrypoint.start \
+            && chmod u+x /etc/local.d/entrypoint.start \
             && echo "echo Error! You should use command \\"exit\\" to exit session. ">/disable.sh \
             && chmod u+x /disable.sh \
             && ln -s /disable.sh /usr/bin/reboot \
