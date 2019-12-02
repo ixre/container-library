@@ -13,7 +13,7 @@ ENV         OPENSSH_VERSION="${OPENSSH_VERSION}" \
 
 COPY        entrypoint.sh /
 RUN         sed -i 's/dl-cdn.alpinelinux.org/mirrors.nju.edu.cn/g' /etc/apk/repositories \
-            && apk add --upgrade --no-cache rsync openssh \
+            && apk add --upgrade --no-cache openssh openrc busybox-extras rsync \
             &&  mkdir -p /root/.ssh "${CONF_VOLUME}" "${AUTHORIZED_KEYS_VOLUME}" \
             && cp -a /etc/ssh "${CACHED_SSH_DIRECTORY}" \
             && rm -rf /var/cache/apk/*
