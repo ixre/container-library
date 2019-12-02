@@ -1,8 +1,5 @@
 #!/usr/bin/env sh
 
-# run openrc 
-/sbin/init
-
 set -e
 # enable debug mode if desired
 if [[ "${DEBUG}" == "true" ]]; then 
