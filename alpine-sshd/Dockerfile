@@ -28,9 +28,9 @@ RUN         sed -i 's/dl-cdn.alpinelinux.org/mirrors.nju.edu.cn/g' /etc/apk/repo
             # can't set hostname since docker sets it
             sed -i 's/hostname $opts/# hostname $opts/g' /etc/init.d/hostname &&\
             # can't mount tmpfs since not privileged
-            sed -i 's/mount -t tmpfs/# mount -t tmpfs/g' /lib/rc/sh/init.sh 
+            sed -i 's/mount -t tmpfs/# mount -t tmpfs/g' /lib/rc/sh/init.sh && \
             # can't do cgroups
-            #sed -i 's/cgroup_add_service /# cgroup_add_service /g' /lib/rc/sh/openrc-run.sh 
+            sed -i 's/cgroup_add_service /# cgroup_add_service /g' /lib/rc/sh/openrc-run.sh 
 
 RUN         echo -e '#!/sbin/openrc-run\n\nsh /entrypoint.sh' > /etc/local.d/entrypoint.start && \
             chmod u+x /etc/local.d/entrypoint.start && \
