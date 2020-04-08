@@ -8,6 +8,7 @@ Usage:
 docker run -t -d --privileged \
     --publish 103.135.248.205:22:22 \
     --env PERMIT_ROOT_LOGIN=true \
+    --env ROOT_PASSWORD=jarrysix \
     --restart always \
     jarry6/alpine-sshd
 ```
