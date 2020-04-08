@@ -7,7 +7,7 @@ Usage:
 ```
 docker run -t -d --privileged \
     --publish 103.135.248.205:22:22 \
-    -env PERMIT_ROOT_LOGIN=true \
+    --env PERMIT_ROOT_LOGIN=true \
     --restart always \
     jarry6/alpine-sshd
 ```
