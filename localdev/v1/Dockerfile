@@ -4,9 +4,8 @@
 # Author : jarrysix(jarrysix@gmail.com)
 # Date : 2018-12-01 00:56
 
-
 # 引入基础镜像
-FROM mariadb:10.3
+FROM alpine:latest
 # 设置开发者
 MAINTAINER jarrysix
 # 设置标签
@@ -19,28 +18,33 @@ ONBUILD RUN echo "正在使用jarrysix的基础镜像"
 
 # 定义环境变量
 ENV MYSQL_ROOT_PASSWORD "123456"
-
 # 进入工作目录,相当于cd
 WORKDIR "/tmp"
-RUN apt-get update && apt-get install -y wget gcc \
-	libpcre3-dev libssl-dev zlib1g.dev make &&\
+
+RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories &&\
+	apk --update add tzdata && cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && apk del tzdata &&\
+	echo "1.Install mariadb" &&\
+	apk add mariadb mariadb-client &&\
 	echo "2.Install nginx" &&\
-	wget -O - "https://nginx.org/download/nginx-1.17.0.tar.gz" | tar xzf - &&\
-	cd nginx* && ./configure --prefix=/usr/local/nginx \
+	apk add --virtual build_deps build-base zlib-dev pcre-dev libressl-dev &&\
+	wget -O - "https://nginx.org/download/nginx-1.17.0.tar.gz" | tar xzf - && \
+	 cd nginx* && ./configure --prefix=/usr/local/nginx \
 				--with-http_stub_status_module \
 				--with-http_ssl_module \
 				--with-http_flv_module \
 				--with-http_mp4_module \
 				--with-http_gzip_static_module \
 				--with-http_realip_module \
-				&& make install &&\
+				&& make install &&\	    
 	echo "3.Install redis" &&\
+	apk add --no-cache --virtual linux-headers &&\
 	wget -O - "http://download.redis.io/releases/redis-5.0.5.tar.gz" | tar xzf - &&\
-    cd redis* && cp redis.conf /etc/ && make install && rm -rf ../* &&\
-    echo "3. Initialize .." &&\
-    apt-get remove -y gcc wget libpcre3-dev libssl-dev zlib1g.dev make gnupg gosu
+    cd redis* && cp redis.conf /etc/ && make install &&\
+	apk del build_deps build-base linux-headers &&\
+	apk add pcre-dev libressl-dev &&\
+	rm -rf ../../* && rm -f /var/cache/apk/* &&\
+    sed -i 's/mirrors.aliyun.com/dl-cdn.alpinelinux.org/g' /etc/apk/repositories
 
-RUN apt autoremove -y
 # 复制本地文件到docker
 COPY docker-boot.sh /
 
@@ -55,14 +59,14 @@ CMD ["sh","/docker-boot.sh"]
 
 # 启动脚本
 #
-# docker run -it --name localdev \
+# docker run -d --name localdev \
 #     -p 80:80 -p 443:443 -p 3306:3306 -p 6379:6379 \
 #     --add-host master:172.17.0.1 \
 #     --volume $(pwd)/data:/data \
 # 	  --volume $(pwd)/mysql:/var/lib/mysql \
 #	  -e MYSQL_ROOT_PASSWORD=123456 \
 #     --restart always \
-#     jarry6/localdev:debian
+#     jarry6/localdev:latest
 
 
 ## mariadb 10.1  - ImageID: 6d77c4dc8d29

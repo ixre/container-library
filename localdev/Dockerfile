@@ -1,5 +1,5 @@
 # This is image use by local develop environment
-# Include mariadb、redis、nginx
+# Include mariadb、nginx
 # Version : 1.1
 # Author : jarrysix(jarrysix@gmail.com)
 # Date : 2018-12-01 00:56
@@ -27,19 +27,16 @@ RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
 	apk add mariadb mariadb-client &&\
 	echo "2.Install nginx" &&\
 	apk add --virtual build_deps build-base zlib-dev pcre-dev libressl-dev &&\
-	wget -O - "https://nginx.org/download/nginx-1.17.0.tar.gz" | tar xzf - && \
+	wget -O - "https://nginx.org/download/nginx-1.18.0.tar.gz" | tar xzf - && \
 	 cd nginx* && ./configure --prefix=/usr/local/nginx \
 				--with-http_stub_status_module \
 				--with-http_ssl_module \
+				--with-http_v2_module \
 				--with-http_flv_module \
 				--with-http_mp4_module \
 				--with-http_gzip_static_module \
 				--with-http_realip_module \
-				&& make install &&\	    
-	echo "3.Install redis" &&\
-	apk add --no-cache --virtual linux-headers &&\
-	wget -O - "http://download.redis.io/releases/redis-5.0.5.tar.gz" | tar xzf - &&\
-    cd redis* && cp redis.conf /etc/ && make install &&\
+				&& make install &&\	  
 	apk del build_deps build-base linux-headers &&\
 	apk add pcre-dev libressl-dev &&\
 	rm -rf ../../* && rm -f /var/cache/apk/* &&\
@@ -52,7 +49,7 @@ COPY docker-boot.sh /
 VOLUME ["/data","/var/lib/mysql"]
 
 # 暴露端口
-EXPOSE 80 443 3306 6379
+EXPOSE 80 443 3306
 
 # 传递给启动命令的参数
 CMD ["sh","/docker-boot.sh"]
@@ -60,7 +57,7 @@ CMD ["sh","/docker-boot.sh"]
 # 启动脚本
 #
 # docker run -d --name localdev \
-#     -p 80:80 -p 443:443 -p 3306:3306 -p 6379:6379 \
+#     -p 80:80 -p 443:443 -p 3306:3306 \
 #     --add-host master:172.17.0.1 \
 #     --volume $(pwd)/data:/data \
 # 	  --volume $(pwd)/mysql:/var/lib/mysql \

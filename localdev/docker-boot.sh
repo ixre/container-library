@@ -1,4 +1,5 @@
 #!/usr/bin/env sh
+#!/usr/bin/env sh
 
 # fix permission
 #chown -R $(id -u):$(id -g) /var/lib/mysql/;chown -R mysql:mysql /var/lib/mysql/
@@ -9,11 +10,11 @@ if [ ! -f "/data/etc" ];then
  	mkdir -p /data/etc
 fi
 
-if [ ! -f "/data/etc/redis.conf" ];then
-    cp /etc/redis.conf /data/etc/
-else
-    cat /data/etc/redis.conf > /etc/redis.conf
-fi
+# if [ ! -f "/data/etc/redis.conf" ];then
+#     cp /etc/redis.conf /data/etc/
+# else
+#     cat /data/etc/redis.conf > /etc/redis.conf
+# fi
 
 if [ ! -f "/data/etc/profile" ];then
     cp /etc/profile /data/etc/
@@ -59,8 +60,9 @@ fi
 
 
 # Start redis-server
-redis-server /etc/redis.conf &
-echo "[ Local-Dev][ OK]: Redis started successfully!"
+
+# redis-server /etc/redis.conf &
+# echo "[ Local-Dev][ OK]: Redis started successfully!"
 
 
 # Start nginx

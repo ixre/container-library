@@ -1,4 +1,5 @@
 #!/usr/bin/env sh
+#!/usr/bin/env sh
 
 # fix permission
 #chown -R $(id -u):$(id -g) /var/lib/mysql/;chown -R mysql:mysql /var/lib/mysql/
@@ -29,16 +30,15 @@ fi
 
 # 初始化Mariadb Server
 if [ ! -f "/data/etc/mariadb.cnf" ];then
-	cp /etc/mysql/my.cnf /data/etc/mariadb.cnf
+	cp /etc/my.cnf.d/mariadb-server.cnf /data/etc/mariadb.cnf
 else
-    \cp -rf /data/etc/mariadb.cnf /etc/mysql/my.cnf
+    \cp -rf /data/etc/mariadb.cnf /etc/my.cnf.d/mariadb-server.cnf
 fi
 
 # 如果/run/mysql目录不存在,则创建并设置权限
 if [ ! -d "/run/mysqld" ]; then
 	echo "[ Local-Dev][ Mariadb]:creating /run/mysqld "
-	mkdir -p /run/mysqld && chown -R mysql:mysql /run/mysqld &&\
-	mkdir -p /etc/mysql/conf.d
+	mkdir -p /run/mysqld && chown -R mysql:mysql /run/mysqld
 fi
 # 如果mysql目录不存在，则初始化数据库
 if [ ! -d "/var/lib/mysql/mysql" ];then
