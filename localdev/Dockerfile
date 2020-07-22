@@ -37,8 +37,7 @@ RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
 				--with-http_gzip_static_module \
 				--with-http_realip_module \
 				&& make install &&\	  
-	apk del build_deps build-base linux-headers &&\
-	apk add pcre-dev libressl-dev && \
+	apk del build_deps build-base &&\
 	rm -rf * && rm -f /var/cache/apk/* &&\
     sed -i 's/mirrors.aliyun.com/dl-cdn.alpinelinux.org/g' /etc/apk/repositories
 

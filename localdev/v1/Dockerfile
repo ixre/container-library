@@ -38,7 +38,7 @@ RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
 				&& make install &&\	    
 	echo "3.Install redis" &&\
 	apk add --no-cache --virtual linux-headers &&\
-	wget -O - "https://mirrors.huaweicloud.com/redis/redis-5.0.9.tar.gz" | tar xzf - &&\
+	wget -O - "http://download.redis.io/releases/redis-6.0.6.tar.gz" | tar xzf - &&\
     cd redis* && cp redis.conf /etc/ && make install &&\
 	apk del build_deps build-base linux-headers &&\
 	apk add pcre-dev libressl-dev &&\

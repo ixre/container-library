@@ -1,0 +1,28 @@
+version: "3"
+services:
+    localdev:
+        image: jarry6/localdev:latest
+        ports:
+            - "80:80"
+            - "443:443"
+            - "3306:3306"
+        volumes:
+            - ./data:/data
+            - ./mysql:/var/lib/mysql
+        extra_hosts:
+            - "docker0:172.17.0.1"
+        restart: always
+
+    postgres:
+        image: postgres:11.2-alpine
+        ports:
+            - "5432:5432"
+        volumes:
+            - ./postgres:/var/lib/postgresql/data
+        environment:
+            - POSTGRES_PASSWORD:123456
+        restart: always
+    redis:
+        image: redis
+        ports:
+            - "6379:6379"
