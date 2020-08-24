@@ -10,6 +10,11 @@ if [ ! -f "/data/etc" ];then
  	mkdir -p /data/etc
 fi
 
+# create logs folder
+if [ ! -f "/data/logs" ];then
+ 	mkdir -p /data/logs && chmod a+rw /data/logs
+fi
+
 # if [ ! -f "/data/etc/redis.conf" ];then
 #     cp /etc/redis.conf /data/etc/
 # else
