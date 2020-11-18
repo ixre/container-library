@@ -27,7 +27,7 @@ RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
 	apk add mariadb mariadb-client &&\
 	echo "2.Install nginx" &&\
 	apk add --virtual build_deps build-base zlib-dev pcre-dev libressl-dev &&\
-	wget -O - "https://nginx.org/download/nginx-1.18.0.tar.gz" | tar xzf - && \
+	wget -O - "https://nginx.org/download/nginx-1.19.4.tar.gz" | tar xzf - && \
 	 cd nginx* && ./configure --prefix=/usr/local/nginx \
 				--with-http_stub_status_module \
 				--with-http_ssl_module \
