@@ -35,6 +35,6 @@ echo "[ Local-Dev][ OK]: Nginx started successfully!"
 
 
 # Start redis-server
-echo "[ Local-Dev][ OK]: Redis started successfully!"
-redis-server /etc/redis.conf 
+#echo "[ Local-Dev][ OK]: Redis started successfully!"
+#redis-server /etc/redis.conf 
 

@@ -34,6 +34,9 @@ RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
 				&& make install &&\	    
 	echo "2.Install redis" &&\
 	apk add --no-cache --virtual redis && \
+
+	apk del build_deps build-base && \
+	apk add pcre-dev libressl-dev && \
 	rm -rf ../* && rm -f /var/cache/apk/* &&\
     sed -i 's/mirrors.aliyun.com/dl-cdn.alpinelinux.org/g' /etc/apk/repositories
 
