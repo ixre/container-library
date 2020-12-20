@@ -30,8 +30,8 @@ fi
 
 
 # Start nginx
-/usr/local/nginx/sbin/nginx
 echo "[ Local-Dev][ OK]: Nginx started successfully!"
+/usr/local/nginx/sbin/nginx -g 'daemon off;'
 
 
 # Start redis-server
