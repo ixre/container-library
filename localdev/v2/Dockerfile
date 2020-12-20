@@ -27,11 +27,12 @@ RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
 	 cd nginx* && ./configure --prefix=/usr/local/nginx \
 				--with-http_stub_status_module \
 				--with-http_ssl_module \
+				--with-http_v2_module \
 				--with-http_flv_module \
 				--with-http_mp4_module \
 				--with-http_gzip_static_module \
 				--with-http_realip_module \
-				&& make install &&\	    
+				&& make install &&\	  
 	echo "2.Install redis" &&\
 	apk add --no-cache --virtual redis && \
 
