@@ -21,8 +21,8 @@ ENV MYSQL_ROOT_PASSWORD "123456"
 # 进入工作目录,相当于cd
 WORKDIR "/tmp"
 
-RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories &&\
-	apk --update add tzdata && cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && apk del tzdata &&\
+# sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
+RUN apk --update add tzdata && cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && apk del tzdata &&\
 	echo "1.Install mariadb" &&\
 	apk add mariadb mariadb-client &&\
 	echo "2.Install nginx" &&\
@@ -40,8 +40,7 @@ RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
 	echo "3.Install redis" &&\
 	apk add --no-cache --virtual redis && \
 	apk del build_deps build-base  &&\
-	rm -rf ../* && rm -f /var/cache/apk/* &&\
-    sed -i 's/mirrors.aliyun.com/dl-cdn.alpinelinux.org/g' /etc/apk/repositories
+	rm -rf ../* && rm -f /var/cache/apk/*
 
 # 复制本地文件到docker
 COPY docker-boot.sh /
