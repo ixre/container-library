@@ -21,13 +21,14 @@ ENV MYSQL_ROOT_PASSWORD "123456"
 # 进入工作目录,相当于cd
 WORKDIR "/tmp"
 
-# sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
+RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
 RUN apk --update add tzdata && cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && apk del tzdata &&\
 	echo "1.Install mariadb" &&\
-	apk add mariadb mariadb-client &&\
-	echo "2.Install nginx" &&\
-	apk add --virtual build_deps build-base zlib-dev pcre-dev libressl-dev &&\
-	wget -O - "https://nginx.org/download/nginx-1.19.4.tar.gz" | tar xzf - && \
+	apk add mariadb mariadb-client
+
+RUN echo "2.Install nginx" &&\
+	apk add --virtual build_deps build-base zlib-dev pcre-dev libressl-dev curl &&\
+	curl -L "https://nginx.org/download/nginx-1.19.4.tar.gz" | tar xz && \
 	 cd nginx* && ./configure --prefix=/usr/local/nginx \
 				--with-http_stub_status_module \
 				--with-http_ssl_module \
@@ -36,11 +37,11 @@ RUN apk --update add tzdata && cp /usr/share/zoneinfo/Asia/Shanghai /etc/localti
 				--with-http_mp4_module \
 				--with-http_gzip_static_module \
 				--with-http_realip_module \
-				&& make install &&\	  
-	echo "3.Install redis" &&\
-	apk add --no-cache --virtual redis && \
-	apk del build_deps build-base  &&\
-	rm -rf ../* && rm -f /var/cache/apk/*
+				&& make install
+RUN	echo "3.Install redis" && \
+	apk del build_deps build-base curl \
+	&& apk add redis libressl-dev \
+	&& rm -rf /tmp/* && rm -f /var/cache/apk/*
 
 # 复制本地文件到docker
 COPY docker-boot.sh /

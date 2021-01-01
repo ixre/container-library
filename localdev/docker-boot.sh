@@ -1,9 +1,9 @@
 #!/usr/bin/env sh
-#!/usr/bin/env sh
 
 # fix permission
 #chown -R $(id -u):$(id -g) /var/lib/mysql/;chown -R mysql:mysql /var/lib/mysql/
 
+set -e
 
 # init data
 if [ ! -f "/data/etc" ];then
