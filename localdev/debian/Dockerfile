@@ -6,7 +6,7 @@
 
 
 # 引入基础镜像
-FROM mariadb:10.3
+FROM debian:stable-slim
 # 设置开发者
 MAINTAINER jarrysix
 # 设置标签
@@ -22,10 +22,11 @@ ENV MYSQL_ROOT_PASSWORD "123456"
 
 # 进入工作目录,相当于cd
 WORKDIR "/tmp"
+RUN sed -i 's/deb.debian.org/mirrors.ustc.edu.cn/g' /etc/apt/sources.list
 RUN apt-get update && apt-get install -y wget gcc \
 	libpcre3-dev libssl-dev zlib1g.dev make &&\
 	echo "2.Install nginx" &&\
-	wget -O - "https://nginx.org/download/nginx-1.17.0.tar.gz" | tar xzf - &&\
+	curl -L "https://nginx.org/download/nginx-1.19.4.tar.gz" | tar xz &&\
 	cd nginx* && ./configure --prefix=/usr/local/nginx \
 				--with-http_stub_status_module \
 				--with-http_ssl_module \
@@ -33,8 +34,8 @@ RUN apt-get update && apt-get install -y wget gcc \
 				--with-http_mp4_module \
 				--with-http_gzip_static_module \
 				--with-http_realip_module \
-				&& make install &&\
-	echo "3.Install redis" &&\
+				&& make install 
+RUN echo "3.Install redis" &&\
 	wget -O - "http://download.redis.io/releases/redis-5.0.5.tar.gz" | tar xzf - &&\
     cd redis* && cp redis.conf /etc/ && make install && rm -rf ../* &&\
     echo "3. Initialize .." &&\

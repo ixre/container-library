@@ -46,7 +46,8 @@ if [ ! -d "/run/mysqld" ]; then
 	mkdir -p /run/mysqld && chown -R mysql:mysql /run/mysqld
 fi
 
-chown -R mysql:mysql /var/lib/mysql
+export SKIP_INNODB=1
+#chown -R mysql:mysql /var/lib/mysql
 # 如果mysql目录不存在，则初始化数据库
 if [ ! -d "/var/lib/mysql/mysql" ];then
     mysql_install_db --user=mysql --datadir=/var/lib/mysql --ldata=/var/lib/mysql &&\
