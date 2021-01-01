@@ -37,8 +37,9 @@ RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
 				--with-http_gzip_static_module \
 				--with-http_realip_module \
 				&& make install &&\	  
-	apk del build_deps build-base &&\
-	apk add pcre-dev libressl-dev &&\
+	echo "3.Install redis" &&\
+	apk add --no-cache --virtual redis && \
+	apk del build_deps build-base  &&\
 	rm -rf ../* && rm -f /var/cache/apk/* &&\
     sed -i 's/mirrors.aliyun.com/dl-cdn.alpinelinux.org/g' /etc/apk/repositories
 
@@ -49,7 +50,7 @@ COPY docker-boot.sh /
 VOLUME ["/data","/var/lib/mysql"]
 
 # 暴露端口
-EXPOSE 80 443 3306
+EXPOSE 80 443 3306 6379
 
 # 传递给启动命令的参数
 CMD ["sh","/docker-boot.sh"]
@@ -57,7 +58,7 @@ CMD ["sh","/docker-boot.sh"]
 # 启动脚本
 #
 # docker run -d --name localdev \
-#     -p 80:80 -p 443:443 -p 3306:3306 \
+#     -p 80:80 -p 443:443 -p 3306:3306 -p 6379:6379\
 #     --add-host master:172.17.0.1 \
 #     --volume $(pwd)/data:/data \
 # 	  --volume $(pwd)/mysql:/var/lib/mysql \

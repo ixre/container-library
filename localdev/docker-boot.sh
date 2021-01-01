@@ -15,11 +15,11 @@ if [ ! -f "/data/logs" ];then
  	mkdir -p /data/logs && chmod a+rw /data/logs
 fi
 
-# if [ ! -f "/data/etc/redis.conf" ];then
-#     cp /etc/redis.conf /data/etc/
-# else
-#     cat /data/etc/redis.conf > /etc/redis.conf
-# fi
+if [ ! -f "/data/etc/redis.conf" ];then
+    cp /etc/redis.conf /data/etc/
+else
+    cat /data/etc/redis.conf > /etc/redis.conf
+fi
 
 if [ ! -f "/data/etc/profile" ];then
     cp /etc/profile /data/etc/
@@ -45,10 +45,11 @@ if [ ! -d "/run/mysqld" ]; then
 	echo "[ Local-Dev][ Mariadb]:creating /run/mysqld "
 	mkdir -p /run/mysqld && chown -R mysql:mysql /run/mysqld
 fi
+
+chown -R mysql:mysql /var/lib/mysql
 # 如果mysql目录不存在，则初始化数据库
 if [ ! -d "/var/lib/mysql/mysql" ];then
-    chown -R mysql:mysql /var/lib/mysql &&\
-	mysql_install_db --user=mysql --datadir=/var/lib/mysql --ldata=/var/lib/mysql &&\
+    mysql_install_db --user=mysql --datadir=/var/lib/mysql --ldata=/var/lib/mysql &&\
 	sh -c 'mysqld_safe&' && sleep 5 &&\
 	mysql -e 'GRANT ALL ON *.* TO "root"@"%" identified by "'${MYSQL_ROOT_PASSWORD}'";' &&\
 	mysql -e 'GRANT ALL ON *.* TO "root"@"172.17.%" identified by "";' &&\
@@ -66,19 +67,16 @@ fi
 
 # Start redis-server
 
-# redis-server /etc/redis.conf &
-# echo "[ Local-Dev][ OK]: Redis started successfully!"
+redis-server /etc/redis.conf &
+echo "[ localdev][ info]: Redis started successfully!"
 
 
 # Start nginx
 /usr/local/nginx/sbin/nginx
-echo "[ Local-Dev][ OK]: Nginx started successfully!"
-
+echo "[ localdev][ info]: Nginx started successfully!"
 
 # Start mariadb
-chown -R mysql:mysql /var/lib/mysql
 mysqld --user=mysql --datadir=/var/lib/mysql
-echo "[ Local-Dev][ OK]: Mariadb started successfully!"
 
 
 
