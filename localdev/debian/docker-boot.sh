@@ -43,22 +43,28 @@ if [ ! -d "/run/mysqld" ]; then
 fi
 # 如果mysql目录不存在，则初始化数据库
 if [ ! -d "/var/lib/mysql/mysql" ];then
-    chown -R mysql:mysql /var/lib/mysql &&\
-	mysql_install_db --user=mysql --datadir=/var/lib/mysql --ldata=/var/lib/mysql &&\
-	sh -c 'mysqld_safe&' && sleep 5 \
-	&& mysql -e 'CREATE USER "root"@"%" IDENTIFIED by '${MYSQL_ROOT_PASSWORD}'"'\
-		'; GRANT ALL ON *.* to "root"@"%" with grant option;' \
-	&& mysql -e 'CREATE USER "root"@"172.17.%" IDENTIFIED by ""' \
-		'; GRANT ALL ON *.* to "root"@"172.17.%" with grant option;' \
+	# mysql8
+	#&& mysql -e 'CREATE USER "root"@"%" IDENTIFIED by '${MYSQL_ROOT_PASSWORD}'"'\
+	#	'; GRANT ALL ON *.* to "root"@"%" with grant option;' \
+	#&& mysql -e 'CREATE USER "root"@"172.17.%" IDENTIFIED by ""' \
+	#	'; GRANT ALL ON *.* to "root"@"172.17.%" with grant option;' \
+
+    chown -R mysql:mysql /var/lib/mysql \
+	&& mysql_install_db --user=mysql --datadir=/var/lib/mysql --ldata=/var/lib/mysql \
+	&& sh -c 'mysqld_safe&' && sleep 5 \
+	&& mysql -e 'GRANT ALL ON *.* TO "root"@"%" identified by "'${MYSQL_ROOT_PASSWORD}'";FLUSH PRIVILEGES;' \
+	&& mysql -e 'CREATE USER "root"@"172.17.%" IDENTIFIED by "";GRANT ALL ON *.* TO "root"@"172.17.%" identified by "";' \
 	&& mysql -e 'FLUSH PRIVILEGES;SELECT user,host from mysql.user;' \
-	&& ps -ef|grep mysqld|awk '{print $1}'|xargs kill -15
+	&& service mysql stop
+	#&& ps -ef|grep mysqld -m1 | awk '{print $2}'|xargs kill -15
 	if [ $? -eq 0 ]; then 
 		echo "[ Local-Dev][ Mariadb]: Data initialize successfully!"
 	else
-		ps -ef|grep mysqld|awk '{print $2}'|xargs kill -15 # kill mysqld_safe on debian
 		cat /var/lib/mysql/*.err
+		ps -ef|grep mysqld|awk '{print $2}'|xargs kill -15 # kill mysqld_safe on debian
 		echo "[ Local-Dev][ Mariadb]: Data initialize failed!"
 	fi
+	ps -ef
 fi
 
 
@@ -74,7 +80,7 @@ echo "[ Local-Dev][ OK]: Nginx started successfully!"
 
 # Start mariadb
 chown -R mysql:mysql /var/lib/mysql
-mysqld --user=mysql --datadir=/var/lib/mysql
+mysqld_safe --user=mysql --datadir=/var/lib/mysql
 echo "[ Local-Dev][ OK]: Mariadb started successfully!"
 
 
