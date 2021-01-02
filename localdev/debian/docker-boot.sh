@@ -3,6 +3,7 @@
 # fix permission
 #chown -R $(id -u):$(id -g) /var/lib/mysql/;chown -R mysql:mysql /var/lib/mysql/
 
+set -e
 
 # init data
 if [ ! -f "/data/etc" ];then
@@ -44,11 +45,13 @@ fi
 if [ ! -d "/var/lib/mysql/mysql" ];then
     chown -R mysql:mysql /var/lib/mysql &&\
 	mysql_install_db --user=mysql --datadir=/var/lib/mysql --ldata=/var/lib/mysql &&\
-	sh -c 'mysqld_safe&' && sleep 5 &&\
-	mysql -e 'GRANT ALL ON *.* TO "root"@"%" identified by "'${MYSQL_ROOT_PASSWORD}'";' &&\
-	mysql -e 'GRANT ALL ON *.* TO "root"@"172.17.%" identified by "";' &&\
-	mysql -e 'FLUSH PRIVILEGES;SELECT user,host from mysql.user;' &&\
-	ps -ef|grep mysqld|awk '{print $1}'|xargs kill -15
+	sh -c 'mysqld_safe&' && sleep 5 \
+	&& mysql -e 'CREATE USER "root"@"%" IDENTIFIED by '${MYSQL_ROOT_PASSWORD}'"'\
+		'; GRANT ALL ON *.* to "root"@"%" with grant option;' \
+	&& mysql -e 'CREATE USER "root"@"172.17.%" IDENTIFIED by ""' \
+		'; GRANT ALL ON *.* to "root"@"172.17.%" with grant option;' \
+	&& mysql -e 'FLUSH PRIVILEGES;SELECT user,host from mysql.user;' \
+	&& ps -ef|grep mysqld|awk '{print $1}'|xargs kill -15
 	if [ $? -eq 0 ]; then 
 		echo "[ Local-Dev][ Mariadb]: Data initialize successfully!"
 	else

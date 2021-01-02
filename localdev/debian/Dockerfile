@@ -22,26 +22,29 @@ ENV MYSQL_ROOT_PASSWORD "123456"
 
 # 进入工作目录,相当于cd
 WORKDIR "/tmp"
-RUN sed -i 's/deb.debian.org/mirrors.ustc.edu.cn/g' /etc/apt/sources.list
-RUN apt-get update && apt-get install -y wget gcc \
-	libpcre3-dev libssl-dev zlib1g.dev make &&\
-	echo "2.Install nginx" &&\
-	curl -L "https://nginx.org/download/nginx-1.19.4.tar.gz" | tar xz &&\
-	cd nginx* && ./configure --prefix=/usr/local/nginx \
+RUN sed -i 's/deb.debian.org/mirrors.ustc.edu.cn/g' /etc/apt/sources.list \
+	&& apt-get update && apt-get install -y wget gcc \
+	libpcre3-dev libssl-dev zlib1g.dev make curl \
+	&& echo "1.Install nginx" &&\
+	curl -L "https://nginx.org/download/nginx-1.19.4.tar.gz" | tar xz && cd nginx* \
+	&& ./configure --prefix=/usr/local/nginx \
 				--with-http_stub_status_module \
 				--with-http_ssl_module \
 				--with-http_flv_module \
 				--with-http_mp4_module \
 				--with-http_gzip_static_module \
 				--with-http_realip_module \
-				&& make install 
-RUN echo "3.Install redis" &&\
-	wget -O - "http://download.redis.io/releases/redis-5.0.5.tar.gz" | tar xzf - &&\
-    cd redis* && cp redis.conf /etc/ && make install && rm -rf ../* &&\
-    echo "3. Initialize .." &&\
-    apt-get remove -y gcc wget libpcre3-dev libssl-dev zlib1g.dev make gnupg gosu
+				&& make install \
+	&& echo "2.Install mariadb" \
+	&& apt-get -y install mariadb-server \
+	&& echo "3.Install redis" \
+	&& curl -L http://download.redis.io/releases/redis-5.0.5.tar.gz | tar xz \
+    && cd redis* && cp redis.conf /etc/ && make install \
+    && echo "4. Cleaning .." \
+    && apt-get remove -y gcc wget libpcre3-dev libssl-dev zlib1g.dev make gnupg gosu curl \
+    && apt autoremove -y \
+    && rm -rf /tmp/*
 
-RUN apt autoremove -y
 # 复制本地文件到docker
 COPY docker-boot.sh /
 

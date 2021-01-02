@@ -49,20 +49,20 @@ fi
 export SKIP_INNODB=1
 #chown -R mysql:mysql /var/lib/mysql
 # 如果mysql目录不存在，则初始化数据库
-if [ ! -d "/var/lib/mysql/mysql" ];then
-    mysql_install_db --user=mysql --datadir=/var/lib/mysql --ldata=/var/lib/mysql &&\
-	sh -c 'mysqld_safe&' && sleep 5 &&\
 
-	create user ‘username’@’host’ identified by ‘password’;
-grant all on *.* to 'root'@'%' with grant option;
-	mysql -e 'CREATE USER "root"@"%" identified by '${MYSQL_ROOT_PASSWORD}'"'\
-		'; GRANT ALL ON *.* to "root"@"%" with grant option;'
-	mysql -e 'CREATE USER "root"@"172.17.%" identified by ""'\
-		'; GRANT ALL ON *.* to "root"@"172.17.%" with grant option;'
 #	mysql -e 'GRANT ALL ON *.* TO "root"@"%" identified by "'${MYSQL_ROOT_PASSWORD}'";' &&\
 #	mysql -e 'GRANT ALL ON *.* TO "root"@"172.17.%" identified by "";' &&\
-	mysql -e 'FLUSH PRIVILEGES;SELECT user,host from mysql.user;' &&\
-	ps -ef|grep mysqld|awk '{print $1}'|xargs kill -15
+
+
+if [ ! -d "/var/lib/mysql/mysql" ];then
+    mysql_install_db --user=mysql --datadir=/var/lib/mysql --ldata=/var/lib/mysql &&\
+	sh -c 'mysqld_safe&' && sleep 5 \
+	&& mysql -e 'CREATE USER "root"@"%" IDENTIFIED by '${MYSQL_ROOT_PASSWORD}'"'\
+		'; GRANT ALL ON *.* to "root"@"%" with grant option;' \
+	&& mysql -e 'CREATE USER "root"@"172.17.%" IDENTIFIED by ""' \
+		'; GRANT ALL ON *.* to "root"@"172.17.%" with grant option;' \
+	&& mysql -e 'FLUSH PRIVILEGES;SELECT user,host from mysql.user;' \
+	&& ps -ef|grep mysqld|awk '{print $1}'|xargs kill -15
 	if [ $? -eq 0 ]; then 
 		echo "[ Local-Dev][ Mariadb]: Data initialize successfully!"
 	else
