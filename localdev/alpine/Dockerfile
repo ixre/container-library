@@ -28,7 +28,7 @@ RUN apk --update add tzdata && cp /usr/share/zoneinfo/Asia/Shanghai /etc/localti
 
 RUN echo "2.Install nginx" &&\
 	apk add --virtual build_deps build-base zlib-dev pcre-dev libressl-dev curl &&\
-	curl -L "https://nginx.org/download/nginx-1.19.4.tar.gz" | tar xz && \
+	curl -L "https://nginx.org/download/nginx-1.19.6.tar.gz" | tar xz && \
 	 cd nginx* && ./configure --prefix=/usr/local/nginx \
 				--with-http_stub_status_module \
 				--with-http_ssl_module \

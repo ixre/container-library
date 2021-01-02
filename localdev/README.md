@@ -27,12 +27,11 @@ docker run -d --name localdev \
    	--restart always \
     jarry6/localdev:latest
 ```
-
-If you want run it on macox or windows , you should use tag 'debian'. 
+use alpine base image for:
 
 ```
 docker run -ti --rm --name localdev \
     --volume $(pwd)/data:/data \
 	--volume $(pwd)/mysql:/var/lib/mysql \
-    jarry6/localdev:debian
+    jarry6/localdev:alpine
 ```
