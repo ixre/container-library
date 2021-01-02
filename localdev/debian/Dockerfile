@@ -22,19 +22,19 @@ ENV MYSQL_ROOT_PASSWORD "123456"
 
 # 进入工作目录,相当于cd
 WORKDIR "/tmp"
-RUN sed -i 's/deb.debian.org/mirrors.ustc.edu.cn/g' /etc/apt/sources.list
+#RUN sed -i 's/deb.debian.org/mirrors.ustc.edu.cn/g' /etc/apt/sources.list
 RUN apt-get update && apt-get install -y gcc \
 	libpcre3-dev libssl-dev zlib1g.dev make curl \
 	&& echo "1.Install nginx" &&\
 	curl -L "https://nginx.org/download/nginx-1.19.6.tar.gz" | tar xz && cd nginx* \
 	&& ./configure --prefix=/usr/local/nginx \
-				--with-http_stub_status_module \
-				--with-http_ssl_module \
-				--with-http_flv_module \
-				--with-http_mp4_module \
-				--with-http_gzip_static_module \
-				--with-http_realip_module \
-				&& make install \
+		--with-http_stub_status_module \
+		--with-http_ssl_module \
+		--with-http_flv_module \
+		--with-http_mp4_module \
+		--with-http_gzip_static_module \
+		--with-http_realip_module \
+		&& make install \
 	&& echo "2.Install mariadb" \
 	&& apt-get -y install mariadb-server procps \
 	&& echo "3.Install redis" \
