@@ -30,9 +30,9 @@ fi
 
 # 初始化Mariadb Server
 if [ ! -f "/data/etc/mariadb.cnf" ];then
-	cp /etc/mysql/my.cnf /data/etc/mariadb.cnf
+	cp /etc/mysql/mariadb.conf.d/50-server.cnf /data/etc/mariadb.cnf
 else
-    \cp -rf /data/etc/mariadb.cnf /etc/mysql/my.cnf
+    \cp -rf /data/etc/mariadb.cnf /etc/mysql/mariadb.conf.d/50-server.cnf
 fi
 
 # 如果/run/mysql目录不存在,则创建并设置权限
