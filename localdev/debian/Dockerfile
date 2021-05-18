@@ -26,7 +26,7 @@ WORKDIR "/tmp"
 RUN apt-get update && apt-get install -y gcc \
 	libpcre3-dev libssl-dev zlib1g.dev make curl \
 	&& echo "1.Install nginx" &&\
-	curl -L "https://nginx.org/download/nginx-1.19.6.tar.gz" | tar xz && cd nginx* \
+	curl -L "https://nginx.org/download/nginx-1.20.0.tar.gz" | tar xz && cd nginx* \
 	&& ./configure --prefix=/usr/local/nginx \
 		--with-http_stub_status_module \
 		--with-http_ssl_module \
