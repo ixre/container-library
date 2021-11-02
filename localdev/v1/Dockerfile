@@ -18,6 +18,9 @@ ONBUILD RUN echo "正在使用jarrysix的基础镜像"
 
 # 定义环境变量
 ENV MYSQL_ROOT_PASSWORD "123456"
+ENV SERVE_MYSQL true
+ENV SERVE_REDIS true
+
 # 进入工作目录,相当于cd
 WORKDIR "/tmp"
 
@@ -27,7 +30,7 @@ RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
 	apk add mariadb mariadb-client &&\
 	echo "2.Install nginx" &&\
 	apk add --virtual build_deps build-base zlib-dev pcre-dev libressl-dev &&\
-	wget -O - "https://nginx.org/download/nginx-1.17.0.tar.gz" | tar xzf - && \
+	wget -O - "https://nginx.org/download/nginx-1.23.1.tar.gz" | tar xzf - && \
 	 cd nginx* && ./configure --prefix=/usr/local/nginx \
 				--with-http_stub_status_module \
 				--with-http_ssl_module \
@@ -63,8 +66,10 @@ CMD ["sh","/docker-boot.sh"]
 #     --volume $(pwd)/data:/data \
 # 	  --volume $(pwd)/mysql:/var/lib/mysql \
 #	  -e MYSQL_ROOT_PASSWORD=123456 \
+#	  -e SERVE_MYSQL=true \
+#         -e SERVE_REDIS=true \
 #     --restart always \
-#     jarry6/localdev:latest
+#     jarry6/localdev:alpine
 
 
 ## mariadb 10.1  - ImageID: 6d77c4dc8d29
