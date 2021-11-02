@@ -82,8 +82,9 @@ if [ "${SERVE_MYSQL}" = "true" ];then
 fi
 
 # Start nginx
-/usr/local/nginx/sbin/nginx -g "daemon off;"
+
 echo "[ Local-Dev][ OK]: Nginx started successfully!"
+/usr/local/nginx/sbin/nginx -g "daemon off;"
 
 
 
