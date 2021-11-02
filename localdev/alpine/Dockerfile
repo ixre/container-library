@@ -18,6 +18,9 @@ ONBUILD RUN echo "正在使用jarrysix的基础镜像"
 
 # 定义环境变量
 ENV MYSQL_ROOT_PASSWORD "123456"
+ENV SERVE_MYSQL true
+ENV SERVE_REDIS true
+
 # 进入工作目录,相当于cd
 WORKDIR "/tmp"
 
@@ -28,7 +31,7 @@ RUN apk --update add tzdata && cp /usr/share/zoneinfo/Asia/Shanghai /etc/localti
 
 RUN echo "2.Install nginx" &&\
 	apk add --virtual build_deps build-base zlib-dev pcre-dev libressl-dev curl &&\
-	curl -L "https://nginx.org/download/nginx-1.19.6.tar.gz" | tar xz && \
+	curl -L "https://nginx.org/download/nginx-1.23.1.tar.gz" | tar xz && \
 	 cd nginx* && ./configure --prefix=/usr/local/nginx \
 				--with-http_stub_status_module \
 				--with-http_ssl_module \
@@ -63,8 +66,10 @@ CMD ["sh","/docker-boot.sh"]
 #     --volume $(pwd)/data:/data \
 # 	  --volume $(pwd)/mysql:/var/lib/mysql \
 #	  -e MYSQL_ROOT_PASSWORD=123456 \
+#         -e SERVE_MYSQL=true \
+#         -e SERVE_REDIS=true \
 #     --restart always \
-#     jarry6/localdev:latest
+#     jarry6/localdev:alpine
 
 
 ## mariadb 10.1  - ImageID: 6d77c4dc8d29
