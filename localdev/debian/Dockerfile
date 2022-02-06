@@ -28,7 +28,7 @@ WORKDIR "/tmp"
 RUN apt-get update && apt-get install -y gcc \
 	libpcre3-dev libssl-dev zlib1g.dev make curl \
 	&& echo "1.Install nginx" &&\
-	curl -L "https://nginx.org/download/nginx-1.21.3.tar.gz" | tar xz && cd nginx* \
+	curl -L "https://nginx.org/download/nginx-1.21.6.tar.gz" | tar xz && cd nginx* \
 	&& ./configure --prefix=/usr/local/nginx \
 		--with-http_stub_status_module \
 		--with-http_ssl_module \
@@ -41,7 +41,7 @@ RUN apt-get update && apt-get install -y gcc \
 	&& echo "2.Install mariadb" \
 	&& apt-get -y install mariadb-server procps \
 	&& echo "3.Install redis" \
-	&& curl -L http://download.redis.io/releases/redis-6.0.9.tar.gz | tar xz \
+	&& curl -L http://download.redis.io/releases/redis-6.2.6.tar.gz | tar xz \
     && cd redis* && cp redis.conf /etc/ && make install \
     && echo "4. Cleaning .." \
     && apt-get remove -y gcc libpcre3-dev libssl-dev zlib1g.dev make gnupg gosu curl \
