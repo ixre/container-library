@@ -7,9 +7,10 @@ FishEye include `Crucible`(CodeReview Tools)
 Usage:
 
 ```sh
+mkdir fisheye && chmod a+rw fisheye
 docker run -td --name fisheye -p 8080:8080 \
-  -v ./data:/atlassian/data \
-  jarry6/fisheye
+  -v ./data:/atlassian/data/fisheye \
+  jarry6/fisheye:4.8.13
 ```
 
 使用官方镜像
